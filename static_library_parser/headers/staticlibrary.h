@@ -1,3 +1,4 @@
+#pragma once
 #include "staticlib/libheader.h"
 #include "staticlib/LinkerMembers.h"
 #include "CoffParser/CoffFiles.h"
