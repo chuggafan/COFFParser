@@ -47,5 +47,46 @@ struct SectionTable
     SectionCharacteristics Characteristics;  // Flags that describe characteristics of section, see SectionCharacteristics or
                                              // section 4.1 "section flags" of pecoff_v8.doc
 };
+// OBJECT ONLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+struct COFFRelocations
+{
+    uint32_t VirtualAddress;  // Address of the item to which relocation is applied, This is offset from beginning of section, plus
+                              // the value of the RVA/Offset field, See section 4 of pecoff_v8.doc for more.
+    uint32_t SymbolTableIndex;
+    COFFRelocType Type;
+};
+union CoffDebugType
+{
+    uint32_t SymbolTableIndex;
+    uint32_t VirtualAddress;
+};
+struct CoffLineNumber
+{
+    CoffDebugType Type;
+    // Note: this is 1-based, relative to the function
+    uint16_t LineNumber;  // When non-zero, specifies a one based line number, when zero, the Type field is interpreted as a symbol
+                          // table index for a function
+};
+union CoffSymbolName
+{
+    char ShortName[8];  // An array of 8 bytes, the array is padded with nulls on the right if the name is less than 8 bytes long
+    struct
+    {
+        uint32_t Zeroes;
+        uint32_t Offset;
+    };
+};
+struct CoffSymbolTable
+{
+    CoffSymbolName Name;  // Array of 8 bytes if not longer than 8 bytes long
+    uint32_t Value;  // The value that is associated with the symbol. The interpretation of this field depends on SectionNumber and
+                     // StorageClass, a typical meaning is the relocatable address
+    int16_t SectionNumber;     // A signed integer that identifies the section, using a 1 based index into the scetion table, 5.4.2
+                               // section number values pecoff_v8.doc
+    uint16_t Type;             // A number that represents a type, 0x20 for function, 0x0 for not a function
+    uint8_t StorageClass : 1;  // An enumerated value that represents storage class, see section 5.4.4
+    uint8_t NumberOfAuxSymbols : 1;  // Typically no more than 1
+};
+
 }  // namespace COFF
 }  // namespace OrangeC

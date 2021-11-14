@@ -160,5 +160,214 @@ enum SectionCharacteristics : uint64_t
 };
 #undef IM_
 #undef Res
+// clang-format off
+#define IR_(arch, a, b) IMAGE_REL_##arch##_##a = b
+enum COFFRelocType : uint16_t
+{
+#define IRA_(a, b) IR_(AMD64, a, b)
+    IRA_(ABSOLUTE, 0x0),
+    IRA_(ADDR64,   0x1),
+    IRA_(ADDR32,   0x2),
+    IRA_(ADDR32NB, 0x3),
+    IRA_(REL32,    0x4),
+    IRA_(REL32_1,  0x5),
+    IRA_(REL32_2,  0x6),
+    IRA_(REL32_3,  0x7),
+    IRA_(REL32_4,  0x8),
+    IRA_(REL32_5,  0x9),
+    IRA_(SECTION,  0xA),
+    IRA_(SECREL,   0xB),
+    IRA_(SECREL7,  0xC),
+    IRA_(TOKEN,    0xD),
+    IRA_(SREL32,   0xE),
+    IRA_(PAIR,     0xF),
+    IRA_(SSPAN32,  0x10),
+#undef IRA_
+#define IRA_(a, b) IR_(ARM, a, b)
+    IRA_(ABSOLUTE,  0x00),
+    IRA_(ADDR32,    0x01),
+    IRA_(ADDR32NB,  0x02),
+    IRA_(BRANCH24,  0x03),
+    IRA_(BRANCH11,  0x04),
+    IRA_(TOKEN,     0x05),
+    IRA_(BLX24,     0x08),
+    IRA_(BLX11,     0x09),
+    IRA_(SECTION,   0x0E),
+    IRA_(SECREL,    0x0F),
+    IRA_(MOV32A,    0x10),
+    IRA_(MOV32T,    0x11),
+    IRA_(BRANCH20T, 0x12),
+    IRA_(BRANCH24T, 0x14),
+    IRA_(BLX23T,    0x15),
+#undef IRA_
+#define IR3_(a, b) IR_(SH3, a, b)
+#define IRM_(a, b) IR_(SHM, a, b)
+    IR3_(ABSOLUTE,        0x0),
+    IR3_(DIRECT16,        0x1),
+    IR3_(DIRECT32,        0x2),
+    IR3_(DIRECT8,         0x3),
+    IR3_(DIRECT8_WORD,    0x4),
+    IR3_(DIRECT8_LONG,    0x5),
+    IR3_(DIRECT4,         0x6),
+    IR3_(DIRECT4_WORD,    0x7),
+    IR3_(DIRECT4_LONG,    0x8),
+    IR3_(PCREL8_WORD,     0x9),
+    IR3_(PCREL8_LONG,     0xA),
+    IR3_(PCREL12_WORD,    0xB),
+    IR3_(STARTOF_SECTION, 0xC),
+    IR3_(SIZEOF_SECTION,  0xD),
+    IR3_(SECTION,         0xE),
+    IR3_(SECREL,          0xF),
+    IR3_(DIRECT32_NB,     0x10),
+    IR3_(GPREL4_LONG,     0x11),
+    IR3_(TOKEN,           0x12),
+    IRM_(PCRELPT,         0x13),
+    IRM_(REFLO,           0x14),
+    IRM_(REFHALF,         0x15),
+    IRM_(RELLO,           0x16),
+    IRM_(RELHALF,         0x17),
+    IRM_(PAIR,            0x18),
+    IRM_(NOMODE,          0x8000),
+#undef IR3_
+#undef IRM_
+#define IRP_(a, b) IR_(PPC, a, b)
+    IRP_(ABSOLUTE, 0x0),
+    IRP_(ADDR64,   0x1),
+    IRP_(ADDR32,   0x2),
+    IRP_(ADDR24,   0x3),
+    IRP_(ADDR16,   0x4),
+    IRP_(ADDR14,   0x5),
+    IRP_(REL24,    0x6),
+    IRP_(REL14,    0x7),
+    IRP_(ADDR32NB, 0xA),
+    IRP_(SECREL,   0xB),
+    IRP_(SECTION,  0xC),
+    IRP_(SECREL16, 0xF),
+    IRP_(REFHI,    0x10),
+    IRP_(REFLO,    0x11),
+    IRP_(PAIR,     0x12),
+    IRP_(SECRELLO, 0x13),
+    IRP_(GPREL,    0x15),
+    IRP_(TOKEN,    0x16),
+#undef IRP_
+#define IRI_(a, b) IR_(I386, a, b)
+    IRI_(ABSOLUTE, 0x0),
+    IRI_(DIR16,    0x1),
+    IRI_(REL16,    0x2),
+    IRI_(DIR32,    0x6),
+    IRI_(DIR32NB,  0x7),
+    IRI_(SEG12,    0x9),
+    IRI_(SECTION,  0xA),
+    IRI_(SECREL,   0xB),
+    IRI_(TOKEN,    0xC),
+    IRI_(SECREL7,  0xD),
+    IRI_(REL32,    0x14),
+#undef IRI_
+#define IRI_(a, b) IR_(IA64, a, b)
+    IRI_(ABSOLUTE,   0x0),
+    IRI_(IMM14,      0x1),
+    IRI_(IMM22,      0x2),
+    IRI_(IMM64,      0x3),
+    IRI_(DIR32,      0x4),
+    IRI_(DIR64,      0x5),
+    IRI_(PCREL21B,   0x6),
+    IRI_(PCREL32M,   0x7),
+    IRI_(PCREL21F,   0x8),
+    IRI_(GPREL22,    0x9),
+    IRI_(LTOFF22,    0xA),
+    IRI_(SECTION,    0xB),
+    IRI_(SECREL22,   0xC),
+    IRI_(SECREL64I,  0xD),
+    IRI_(SECREL32,   0xE),
+    IRI_(DIR32NB,    0x10),
+    IRI_(SREL14,     0x11),
+    IRI_(SREL22,     0x12),
+    IRI_(SREL32,     0x13),
+    IRI_(UREL32,     0x14),
+    IRI_(PCREL60X,   0x15),
+    IRI_(PCREL60B,   0x16),
+    IRI_(PCREL60F,   0x17),
+    IRI_(PCREL60I,   0x18),
+    IRI_(PCREL60M,   0x19),
+    IRI_(IMMGPREL64, 0x1a),
+    IRI_(TOKEN,      0x1b),
+    IRI_(GPREL32,    0x1c),
+    IRI_(ADDEND,     0x1f),
+#undef IRI_
+#define IRM_(a, b) IR_(MIPS, a, b)
+    IRM_(ABSOLITE,  0x0),
+    IRM_(REFHALF,   0x1),
+    IRM_(REFWORD,   0x2),
+    IRM_(IMPADDR,   0x3),
+    IRM_(REFHI,     0x4),
+    IRM_(REFLO,     0x5),
+    IRM_(GPREL,     0x6),
+    IRM_(LITERAL,   0x7),
+    IRM_(SECTION,   0xA),
+    IRM_(SECREL,    0xB),
+    IRM_(SECRELLO,  0xC),
+    IRM_(SECRELHI,  0xD),
+    IRM_(IMPADDR16, 0x10),
+    IRM_(REFWORDNB, 0x22),
+    IRM_(PAIR,      0x25),
+#undef IRM_
+#define IRM_(a, b) IR_(M32R, a, b)
+    IRM_(ABSOLUTE,  0x0),
+    IRM_(ADDR32,    0x1),
+    IRM_(ADDR32NB,  0x2),
+    IRM_(ADDR24,    0x3),
+    IRM_(GPREL16,   0x4),
+    IRM_(PCREL24,   0x5),
+    IRM_(PCREL16,   0x6),
+    IRM_(PCREL8,    0x7),
+    IRM_(REFHALF,   0x8),
+    IRM_(REFHI,     0x9),
+    IRM_(REFLO,     0xA),
+    IRM_(PAIR,      0xB),
+    IRM_(SECTION,   0xC),
+    IRM_(SECREL,    0xD),
+    IRM_(TOKEN,     0xE),
+#undef IRM_
+};
+#undef IR_
+// clang-format on
+enum SectionNumberSpecial
+{
+    IMAGE_SYM_UNDEFINED = 0,
+    IMAGE_SYM_ABSOLUTE = -1,
+    IMAGE_SYM_DEBUG = -2,
+};
+// Type representation: MSB is complex, LSB is the base
+#define IST_(a) IMAGE_SYM_TYPE_##a
+// MS tools leave the base type as 0 usually
+enum CoffSymbolTableTypeBase : uint8_t
+{
+    IMAGE_SYM_TYPE_NULL = 0,
+    IST_(VOID),
+    IST_(CHAR),
+    IST_(SHORT),
+    IST_(INT),
+    IST_(LONG),
+    IST_(FLOAT),
+    IST_(DOUBLE),
+    IST_(STRUCT),
+    IST_(UNION),
+    IST_(ENUM),
+    IST_(MOE),
+    IST_(BYTE),
+    IST_(WORD),
+    IST_(UINT),
+    IST_(DWORD),
+};
+#undef IST_
+#define ISD_(a) IMAGE_SYM_DTYPE_##a
+enum CoffSymbolTableDerived : uint8_t
+{
+    IMAGE_SYM_DTYPE_NULL = 0,
+    ISD_(POINTER),
+    ISD_(FUNCTION),
+    ISD_(ARRAY),
+};
+#undef ISD_
 }  // namespace COFF
 }  // namespace OrangeC

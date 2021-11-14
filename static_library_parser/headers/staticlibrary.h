@@ -12,10 +12,11 @@ bool check_valid(std::fstream& stream)
     {
         return false;
     }
+    std::streampos pos = stream.tellg();
     stream.seekg(stream.beg);
     char arch[8] = {0};
     stream.read(arch, 8);
-
+    stream.seekg(pos);
     return !memcmp(arch, "!<arch>\n", 8);
 }
 
