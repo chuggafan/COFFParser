@@ -369,5 +369,70 @@ enum CoffSymbolTableDerived : uint8_t
     ISD_(ARRAY),
 };
 #undef ISD_
+#define ISC_(a, b) IMAGE_SYM_CLASS_##a = b
+// All documentation is in section 4.4.4 of pecoff_v8.doc
+enum CoffSymbolClass : uint8_t
+{
+    ISC_(END_OF_FUNCTION, -1),
+    ISC_(NULL, 0),
+    ISC_(AUTOMATIC, 1),
+    ISC_(EXTERNAL, 2),
+    ISC_(STATIC, 3),
+    ISC_(REGISTER, 4),
+    ISC_(EXTERNAL_DEF, 5),
+    ISC_(LABEL, 6),
+    ISC_(UNDEFINED_LABEL, 7),
+    ISC_(MEMBER_OF_STRUCTU, 8),
+    ISC_(ARGUMENT, 9),
+    ISC_(STRUCT_TAG, 10),
+    ISC_(MEMBER_OF_UNION, 11),
+    ISC_(UNION_TAG, 12),
+    ISC_(TYPE_DEFINITION, 13),
+    ISC_(UNDEFINED_STATIC, 14),
+    ISC_(ENUM_TAG, 15),
+    ISC_(MEMBER_OF_ENUM, 16),
+    ISC_(REGISTER_PARAM, 17),
+    ISC_(BIT_FIELD, 18),
+    ISC_(CLASS_BLOCK, 100),
+    ISC_(CLASS_FUNCTION, 101),
+    ISC_(END_OF_STRUCT, 102),
+    ISC_(FILE, 103),
+    ISC_(SECTION, 104),
+    ISC_(WEAK_EXTERNAL, 105),
+    ISC_(CLR_TOKEN, 107)
+};
+#undef ISC_
+// Using the LLVM definition here since it's not given *anywhere* in the microsoft documentation, presumably found in the dark
+// underbelly known as winnt.h
+enum WeakExternalCharacteristics : uint32_t
+{
+    IMAGE_WEAK_EXTERN_SEARCH_NOLIBRARY = 1,
+    IMAGE_WEAK_EXTERN_SEARCH_LIBRARY = 2,
+    IMAGE_WEAK_EXTERN_SEARCH_ALIAS = 3,
+    IMAGE_WEAK_EXTERN_ANTI_DEPENDENCY = 4
+};
+#define ICS_(a) IMAGE_COMDAT_SELECT_##a
+enum COFFComdatSelection : uint8_t
+{
+    ICS_(NODPULICATES),
+    ICS_(ANY),
+    ICS_(SAME_SIZE),
+    ICS_(EXACT_MATCH),
+    ICS_(ASSOCIATIVE),
+    ICS_(LARGEST)
+};
+#undef ICS_
+enum WinCertRevisions : uint16_t
+{
+    WIN_CERT_REVISION_1_0 = 0x0100,
+    WIN_CERT_REVISION_2_0 = 0x0200,
+};
+enum WinCertificateType : uint16_t
+{
+    WIN_CERT_TYPE_X509 = 1,
+    WIN_CERT_TYPE_PKCS_SIGNED_DATA = 2,
+    WIN_CERT_TYPE_RESERVED_1 = 3,
+    WIN_CERT_TYPE_TS_STACK_SIGNED = 4,  // Not supported
+};
 }  // namespace COFF
 }  // namespace OrangeC

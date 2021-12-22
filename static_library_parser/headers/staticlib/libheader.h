@@ -82,8 +82,6 @@ LibHeader parse_lib_header(std::fstream& stream, bool isFirst)
     {
         align_stream_to_even_input(stream);
     }
-    std::streampos pos = stream.tellg();
-    std::cout << pos << std::endl;
     LibHeader header;
     stream.read((char*)&header, sizeof(header));  // Abuse layouts to read directly into the structure
     return header;
